@@ -31,7 +31,7 @@ class Server {
         this.queries = new Map(); // playerId -> gameId
     }
 
-    addPlayer(player) {
+    addPlayer(player) {z
         this.players.set(player.id, player);
     }
 
