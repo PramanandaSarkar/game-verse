@@ -1,0 +1,5 @@
+# majors
+- multiplayer support
+- multi-game support
+- player interaction
+- ingame-and-outside-game-communication
