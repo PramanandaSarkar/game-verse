@@ -1,8 +1,8 @@
 const MatchStates = {
-    "STARTING" : "starting",
-    "READY": "READY"
-    "RUNNING" : "running",
-    "COMPLETED": "completed"
+    STARTING : "starting",
+    READY: "READY",
+    RUNNING : "running",
+    COMPLETED: "completed"
 }
 
 class Match{
@@ -35,4 +35,8 @@ class Match{
     }
 
     
+}
+
+export {
+    Match
 }

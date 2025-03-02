@@ -26,5 +26,5 @@ router.get("/info", (_, res) => {
 })
 
 
-export default router;
+export { router };
 
