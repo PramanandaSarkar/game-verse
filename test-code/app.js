@@ -1,103 +1,75 @@
-const express = require("express");
+const PlayerStatus = Object.freeze({
+    INGAME: "INGAME",
+    INMATCHMAKING: "INMATCHMAKING",
+    INHOME: "INHOME"
+});
 
-// Player class
-class Player {
-    constructor(name, id, serverId) {
-        this.name = name;
+const MatchStatus = Object.freeze({
+    RUNNING: "RUNNING",
+    COMPLETED: "COMPLETED",
+    STARTING: "STARTING"
+});
+
+class Player{
+    constructor(id, username, password, serverId, ){
         this.id = id;
-        this.serverId = serverId;
+        this.username = username;
+        this.serverId = id;
+        this.history = new Map();
+        this.password = password;
     }
+    toString(){
+        return "ID: ${this.id}"
+    }
+    
 
-    getId() {
-        return this.id;
-    }
 }
 
-// Game class
-class Game {
-    constructor(name, gameId) {
-        this.name = name;
-        this.gameId = gameId;
-    }
-}
 
-// Server class
-class Server {
-    constructor(id, maxMatchCount) {
+
+class Match{
+    constructor(id){
         this.id = id;
-        this.maxMatchCount = maxMatchCount;
-        this.players = new Map();
-        this.games = new Map();
-        this.queries = new Map(); // playerId -> gameId
+        this.MatchStatus =  MatchStatus.STARTING;
+        this.players = []
+    }
+    toString(){
+        
+        return "ID: ${this.id}"
+    }
+    addPlayer(id){
+        this.players.push(id)
     }
 
-    addPlayer(player) {z
-        this.players.set(player.id, player);
-    }
-
-    addGame(game) {
-        this.games.set(game.gameId, game);
-    }
-
-    addQuery(playerId, gameId) {
-        if (this.players.has(playerId) && this.games.has(gameId)) {
-            this.queries.set(playerId, gameId);
-        } else {
-            console.log("Invalid player or game ID");
-        }
-    }
-
-    getPlayers() {
-        return Array.from(this.players.values());
-    }
-
-    getGames() {
-        return Array.from(this.games.values());
-    }
+    
 }
 
-// Initialize server with Express
-const app = express();
-const PORT = 3000;
+const Queue = [];
+const SERVERID = 101;
+const players = []
+const matches = []
 
-app.use(express.json());
+const player1 = new Player(10001, "bob", 123, SERVERID)
+const player2 = new Player(10002, "bob", 123, SERVERID)
+const player3 = new Player(10003, "bob", 123, SERVERID)
 
-let server = new Server(101, 10);
 
-// Add initial players
-server.addPlayer(new Player("David", 10001, 101));
-server.addPlayer(new Player("Alice", 10002, 101));
-server.addPlayer(new Player("Bob", 10003, 101));
+players.push(player1)
+players.push(player2)
+players.push(player3)
 
-// Add initial games
-server.addGame(new Game("Tic Tac Toe", 1001));
-server.addGame(new Game("Chess", 1002));
-server.addGame(new Game("Checkers", 1003));
+const match1 = new Match(1000001)
+match1.addPlayer(player1.id)
+matches.push(match1)
 
-// Add initial queries
-server.addQuery(10001, 1001);
-server.addQuery(10002, 1002);
 
-// API endpoints
-app.get("/players", (req, res) => {
-    res.json(server.getPlayers());
-});
+console.log("Players")
 
-app.get("/games", (req, res) => {
-    res.json(server.getGames());
-});
+for(player of players){
+    console.log(player)
+}
+console.log("matches")
+for(match of matches){
+    console.log( match)
+}
 
-app.post("/query", (req, res) => {
-    const { playerId, gameId } = req.body;
-    if (!playerId || !gameId) {
-        return res.status(400).json({ message: "playerId and gameId are required" });
-    }
-    server.addQuery(playerId, gameId);
-    res.json({ message: "Query added successfully" });
-});
-
-app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
-});
-
-console.log("Server setup completed.");
