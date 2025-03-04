@@ -1,4 +1,4 @@
-import {Player} from "../models/Player.model.js"
+import {Player} from "../models/Player.js"
 import {SERVER_ID} from "./serverInfo.js"
 
 const player1 = new Player(10001, "alice1234", 123, SERVER_ID)
